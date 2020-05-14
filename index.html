@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get High Quality Stock Photos for free</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+<v-app>
+    <v-snackbar v-model="snackBar" bottom >
+      {{snackBarText}}
+      <v-btn color="pink" text @click="snackBar = false" >
+        Close
+      </v-btn>
+    </v-snackbar>
+
+    <v-container fluid class="grey lighten-4 text-center" >
+        <h1>Image Finder</h1>
+        <v-spacer></v-spacer>
+        <v-container grid-list-xs>
+          <v-text-field
+            label="Solo"
+            placeholder="Search Image"
+            solo
+            v-on:keyup.enter="searchImage"
+          ></v-text-field>
+        </v-container>
+    </v-container>
+    <v-divider></v-divider>
+    
+    <ul>
+    </ul>
+    <v-container>
+        <v-row>
+            <v-col md="3" sm="6" v-for="(image, i) in images" :key="image.id">
+              <v-skeleton-loader
+                class="mx-auto"
+                max-width="300"
+                type="card"
+                :loading = "isLoading"
+              >
+                <v-card>
+                    <v-img :src="image.webformatURL">
+                    </v-img>
+                    
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+          
+                        <v-btn icon  @click="makeFav(i)">
+                          <v-icon :color="image.liked ? 'red' : ''">mdi-heart</v-icon>
+                        </v-btn>
+                        {{image.likes}}
+
+                        <v-btn icon @click="downloadWithAxios(image.largeImageURL)">
+                          <v-icon>mdi-download</v-icon>
+                        </v-btn>
+                        {{image.downloads}}
+
+                        <v-btn icon @click="viewImg(image.largeImageURL)">
+                          <v-icon>mdi-eye</v-icon>
+                        </v-btn>
+                        {{image.views}}
+                      </v-card-actions>
+                </v-card>
+              </v-skeleton-loader>
+            </v-col>
+        </v-row>
+    </v-container>
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+      <v-card>
+        <v-img :src="dialogImg">
+
+        </v-img>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="success"
+            text
+            @click="downloadWithAxios(dialogImg)"
+          >
+            <v-icon>mdi-download</v-icon>
+            Download
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="dialog = false"
+          >
+            <v-icon>mdi-close</v-icon>
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+</v-app>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
